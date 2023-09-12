@@ -18,8 +18,8 @@ class Globals:
 @st.cache_resource()
 def transcribe_audio(file_path):
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    print("Calling OpenAI Whisper")
     if file_path is not None:
+        print("Calling OpenAI Whisper")
         with open(file_path, 'rb') as audio_file:
             transcript = openai.Audio.transcribe("whisper-1", audio_file)
             if transcript is not None:

@@ -23,7 +23,6 @@ uploaded_file = st.sidebar.file_uploader("Choose a [.mp3, .mp4, .wav, .webm] fil
 file = handle_upload_files(uploaded_file)
 
 if Globals.transcribed_audio_response is None:
-    print(Globals.transcribed_audio_response)
     transcript = transcribe_audio(file_path=file)
     Globals.transcribed_audio_response = transcript
     if transcript is not None:
