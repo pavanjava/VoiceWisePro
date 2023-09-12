@@ -9,7 +9,7 @@ with st.sidebar:
     st.title('🦜 OpenAI API Key')
     if 'api_key' in st.secrets and len(st.secrets['api_key']) > 0 and str(st.secrets['api_key']).startswith('sk-'):
         st.success('API key already provided!', icon='✅')
-        openai_api_api = st.secrets['REPLICATE_API_TOKEN']
+        openai_api_api = st.secrets['api_key']
     else:
         openai_api_api = st.text_input('Enter OpenAI API Key:', type='password')
         if not (openai_api_api.startswith('sk-') and len(openai_api_api) > 0):
