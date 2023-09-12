@@ -1,9 +1,9 @@
 import streamlit as st
 from core.FileUploadHandler import handle_upload_files
-from core.SummarizerAndTranslator import transcribe_audio, qa_retrieval
+from core.SummarizerAndTranslator import transcribe_audio, qa_retrieval, Globals
 import os
 
-st.title("🦜 Langchain + OpenAI - Audio Transcription and Summarization")
+st.title("🦜 Langchain + OpenAI - Audio Transcription, Question and Answer Application")
 
 with st.sidebar:
     st.title('🦜 OpenAI API Key')
@@ -19,10 +19,15 @@ with st.sidebar:
         os.environ['OPENAI_API_KEY'] = openai_api_key
 
 uploaded_file = st.sidebar.file_uploader("Choose a [.mp3, .mp4, .wav, .webm] file", accept_multiple_files=False)
+
 file = handle_upload_files(uploaded_file)
-transcript = transcribe_audio(file_path=file)
-if transcript is not None:
-    st.sidebar.success("Audio transcribed successfully, please ask your questions now")
+
+if Globals.transcribed_audio_response is None:
+    print(Globals.transcribed_audio_response)
+    transcript = transcribe_audio(file_path=file)
+    Globals.transcribed_audio_response = transcript
+    if transcript is not None:
+        st.sidebar.success("Audio transcribed successfully, please ask your questions now")
 
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
@@ -43,7 +48,7 @@ st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
 # Function for generating OpenAI response
 def question_and_answer_routine(prompt_input):
-    return qa_retrieval(prompt=prompt_input, transcript=transcript)
+    return qa_retrieval(prompt=prompt_input, transcript=Globals.transcribed_audio_response)
 
 
 # User-provided prompt
