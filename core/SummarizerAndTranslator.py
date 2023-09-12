@@ -2,10 +2,9 @@ import openai
 import os
 import streamlit as st
 
-openai.api_key = st.secrets.openai.api_key
-
 
 def transcribe_audio(file_path):
+    openai.api_key = os.getenv("api_key")
     if file_path is not None:
         with open(file_path, 'rb') as audio_file:
             transcript = openai.Audio.transcribe("whisper-1", audio_file)
